@@ -1,6 +1,5 @@
 import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -11,6 +10,7 @@ from database import db
 load_dotenv()  # Load .env file
 
 app = Flask(__name__)
+
 app.config.from_object(Config)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
