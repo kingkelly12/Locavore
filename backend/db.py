@@ -1,12 +1,11 @@
+import os
+from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-db = SQLAlchemy()
+load_dotenv()
 
-def init_db(app):
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
-        # You can also add initial data here if needed
-        # Example: db.session.add(User(username='admin', password='admin'))
-        # db.session.commit()
-        
+from app import app
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
