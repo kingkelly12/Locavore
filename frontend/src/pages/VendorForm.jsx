@@ -1,84 +1,88 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function VendorForm() {
-  const { id } = useParams();
-  const isEdit = Boolean(id);
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
+export default function VendorList() {
+  const [vendors, setVendors] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isEdit) {
+    const fetchVendors = async () => {
       const token = localStorage.getItem("token");
-      fetch(`http://localhost:5000/vendors/${id}`, {
+      const res = await fetch("http://localhost:5000/vendors", {
         headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setName(data.name);
-          setLocation(data.location);
-          setDescription(data.description);
-        });
-    }
-  }, [id, isEdit]);
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setVendors(data);
+      }
+    };
+    fetchVendors();
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
+  const handleDelete = async (vendorId) => {
+    if (!window.confirm("Are you sure you want to delete this vendor?")) return;
+
     const token = localStorage.getItem("token");
-    const method = isEdit ? "PUT" : "POST";
-    const url = isEdit
-      ? `http://localhost:5000/vendors/${id}`
-      : "http://localhost:5000/vendors";
-
-    const res = await fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ name, location, description }),
+    const res = await fetch(`http://localhost:5000/vendors/${vendorId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     if (res.ok) {
-      navigate("/vendors");
+      setVendors(vendors.filter((v) => v.id !== vendorId));
     } else {
-      alert("Failed to save vendor");
+      alert("Failed to delete vendor");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-4">{isEdit ? "Edit" : "Add"} Vendor</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          className="w-full border p-2"
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          className="w-full border p-2"
-          type="text"
-          placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          required
-        />
-        <textarea
-          className="w-full border p-2"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={4}
-        />
-        <button className="bg-green-600 text-white px-4 py-2 rounded" type="submit">
-          {isEdit ? "Update" : "Create"}
-        </button>
-      </form>
+    <div className="max-w-xl mx-auto mt-10">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Vendors</h2>
+        <div className="space-x-2">
+          <button
+            onClick={() => navigate("/vendors/new")}
+            className="text-sm text-blue-600 underline"
+          >
+            Add Vendor
+          </button>
+          <button onClick={handleLogout} className="text-sm text-red-600 underline">
+            Logout
+          </button>
+        </div>
+      </div>
+      <ul className="space-y-2">
+        {vendors.map((vendor) => (
+          <li key={vendor.id} className="border p-4 rounded">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-lg font-semibold">{vendor.name}</h3>
+                <p className="text-sm text-gray-600">{vendor.location}</p>
+                <p>{vendor.description}</p>
+              </div>
+              <div className="text-right space-y-1">
+                <button
+                  onClick={() => navigate(`/vendors/edit/${vendor.id}`)}
+                  className="text-sm text-blue-600 underline block"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(vendor.id)}
+                  className="text-sm text-red-600 underline block"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
