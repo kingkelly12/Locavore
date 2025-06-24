@@ -1,0 +1,76 @@
+{
+  "info": {
+    "name": "Locavore API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"test123\"\n}"
+        },
+        "url": { "raw": "http://localhost:5000/register", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["register"] }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"test123\"\n}"
+        },
+        "url": { "raw": "http://localhost:5000/login", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["login"] }
+      }
+    },
+    {
+      "name": "Get Vendors",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "url": { "raw": "http://localhost:5000/vendors", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["vendors"] }
+      }
+    },
+    {
+      "name": "Add Vendor",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Fresh Farm\",\n  \"location\": \"Downtown\",\n  \"description\": \"Organic produce\"\n}"
+        },
+        "url": { "raw": "http://localhost:5000/vendors", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["vendors"] }
+      }
+    },
+    {
+      "name": "Add Review",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{access_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": \"Excellent produce!\",\n  \"rating\": 5,\n  \"vendor_id\": 1\n}"
+        },
+        "url": { "raw": "http://localhost:5000/reviews", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["reviews"] }
+      }
+    }
+  ]
+}
