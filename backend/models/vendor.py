@@ -1,4 +1,4 @@
-from db import db
+from database import db
 
 class Vendor(db.Model):
     __tablename__ = 'vendors'
