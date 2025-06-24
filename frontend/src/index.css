@@ -1,7 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* If not using Tailwind's build process, replace @tailwind directives with the compiled CSS output from Tailwind. 
+Otherwise, ensure your build tool (like PostCSS) is configured to process these directives. */
 
 body {
-  @apply bg-gray-50 text-gray-800;
+  background-color: #f9fafb; /* Equivalent to bg-gray-50 */
+  color: #1f2937;            /* Equivalent to text-gray-800 */
 }

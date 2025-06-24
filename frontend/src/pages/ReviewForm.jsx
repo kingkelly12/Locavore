@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Layout from "../components/Layout";
 
 export default function ReviewForm() {
   const { vendorId, reviewId } = useParams();
@@ -79,63 +80,65 @@ export default function ReviewForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 space-y-10">
-      <div>
-        <h2 className="text-2xl font-bold mb-4">{isEdit ? "Edit" : "Add"} Review</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <textarea
-            className="w-full border p-2"
-            placeholder="Write your review..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={4}
-            required
-          />
-          <input
-            className="w-full border p-2"
-            type="number"
-            min="1"
-            max="5"
-            placeholder="Rating (1-5)"
-            value={rating}
-            onChange={(e) => setRating(Number(e.target.value))}
-            required
-          />
-          <button className="bg-green-600 text-white px-4 py-2 rounded" type="submit">
-            {isEdit ? "Update" : "Submit"}
-          </button>
-        </form>
-      </div>
+    <Layout>
+      <div className="max-w-md mx-auto mt-10 space-y-10">
+        <div>
+          <h2 className="text-2xl font-bold mb-4">{isEdit ? "Edit" : "Add"} Review</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <textarea
+              className="w-full border p-2"
+              placeholder="Write your review..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              rows={4}
+              required
+            />
+            <input
+              className="w-full border p-2"
+              type="number"
+              min="1"
+              max="5"
+              placeholder="Rating (1-5)"
+              value={rating}
+              onChange={(e) => setRating(Number(e.target.value))}
+              required
+            />
+            <button className="bg-green-600 text-white px-4 py-2 rounded" type="submit">
+              {isEdit ? "Update" : "Submit"}
+            </button>
+          </form>
+        </div>
 
-      <div>
-        <h3 className="text-xl font-semibold mb-2">Existing Reviews</h3>
-        <ul className="space-y-3">
-          {reviews.map((review) => (
-            <li key={review.id} className="border p-3 rounded">
-              <div className="flex justify-between">
-                <div>
-                  <p className="font-medium">Rating: {review.rating}</p>
-                  <p>{review.content}</p>
+        <div>
+          <h3 className="text-xl font-semibold mb-2">Existing Reviews</h3>
+          <ul className="space-y-3">
+            {reviews.map((review) => (
+              <li key={review.id} className="border p-3 rounded">
+                <div className="flex justify-between">
+                  <div>
+                    <p className="font-medium">Rating: {review.rating}</p>
+                    <p>{review.content}</p>
+                  </div>
+                  <div className="text-right space-y-1">
+                    <button
+                      onClick={() => navigate(`/vendors/${vendorId}/reviews/${review.id}`)}
+                      className="text-sm text-blue-600 underline block"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(review.id)}
+                      className="text-sm text-red-600 underline block"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-                <div className="text-right space-y-1">
-                  <button
-                    onClick={() => navigate(`/vendors/${vendorId}/reviews/${review.id}`)}
-                    className="text-sm text-blue-600 underline block"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(review.id)}
-                    className="text-sm text-red-600 underline block"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
