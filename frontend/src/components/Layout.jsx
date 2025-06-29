@@ -20,7 +20,7 @@ export default function Layout({ children }) {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-green-700">Locavore 🥕</h1>
+        <h1 className="text-xl font-bold text-green-700">Locavore</h1>
         <nav className="space-x-4">
           <Link to="/vendors" className={linkClasses("/vendors")}>Vendors</Link>
           <button
